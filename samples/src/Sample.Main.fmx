@@ -1,0 +1,50 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 422
+  ClientWidth = 341
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Layout1: TLayout
+    Align = Top
+    Size.Width = 341.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object btnStart: TButton
+      Position.X = 8.000000000000000000
+      Size.Width = 153.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = 'Start Camera'
+      OnClick = btnStartClick
+    end
+    object btnStop: TButton
+      Position.X = 184.000000000000000000
+      Size.Width = 80.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'Stop'
+      OnClick = btnStopClick
+    end
+  end
+  object Image1: TImage
+    MultiResBitmap = <
+      item
+      end>
+    Align = Client
+    Size.Width = 341.000000000000000000
+    Size.Height = 372.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object CameraComponent1: TCameraComponent
+    OnSampleBufferReady = CameraComponent1SampleBufferReady
+    Left = 104
+    Top = 112
+  end
+end
