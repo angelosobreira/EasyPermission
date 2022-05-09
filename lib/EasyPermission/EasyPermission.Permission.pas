@@ -4,6 +4,10 @@ interface
 
 uses System.SysUtils, System.Generics.Collections, System.Permissions,
   FMX.DialogService, System.UITypes
+{$IF CompilerVersion >= 35.0}
+  // Delphi 11 Alexandria
+  ,System.Types
+{$ENDIF}
   {$IFDEF ANDROID},Androidapi.Helpers, Androidapi.JNI.Os, Androidapi.JNI.JavaTypes
   {$ENDIF};
 
@@ -30,10 +34,19 @@ type
       FListaProc : TDictionary<String,TProc<Boolean>>;
 
 
+{$IF CompilerVersion >= 35.0}
+    // after Delphi 11 Alexandria
+    procedure PermissionsResultHandler(Sender: TObject; const APermissions: TClassicStringDynArray; const AGrantResults: TClassicPermissionStatusDynArray);
+    {$IFDEF ANDROID}
+    procedure DisplayRationale(Sender: TObject; const APermissions: TClassicStringDynArray; const APostRationaleProc: TProc);
+    {$ENDIF}
+{$ELSE}
+    // before Delphi 11 Alexandria
     procedure PermissionsResultHandler(Sender: TObject; const APermissions: TArray<string>; const AGrantResults: TArray<TPermissionStatus>);
     {$IFDEF ANDROID}
     procedure DisplayRationale(Sender: TObject; const APermissions: TArray<string>; const APostRationaleProc: TProc);
     {$ENDIF}
+{$ENDIF}
   public
     class function GetInstance : TEasyPermission;
 
@@ -61,8 +74,15 @@ begin
 end;
 
 {$IFDEF ANDROID}
+{$IF CompilerVersion >= 35.0}
+    // after Delphi 11 Alexandria
+procedure TEasyPermission.DisplayRationale(Sender: TObject;
+  const APermissions: TClassicStringDynArray; const APostRationaleProc: TProc);
+{$ELSE}
+    // before Delphi 11 Alexandria
 procedure TEasyPermission.DisplayRationale(Sender: TObject;
   const APermissions: TArray<string>; const APostRationaleProc: TProc);
+{$ENDIF}
 begin
   TDialogService.ShowMessage(C_PERMISSION_NEED_MESSAGE,
     procedure(const AResult: TModalResult)
@@ -81,8 +101,15 @@ begin
   Result := FEasyPermission;
 end;
 
+{$IF CompilerVersion >= 35.0}
+    // after Delphi 11 Alexandria
+procedure TEasyPermission.PermissionsResultHandler(Sender: TObject;
+  const APermissions: TClassicStringDynArray; const AGrantResults: TClassicPermissionStatusDynArray);
+{$ELSE}
+    // before Delphi 11 Alexandria
 procedure TEasyPermission.PermissionsResultHandler(Sender: TObject;
   const APermissions: TArray<string>; const AGrantResults: TArray<TPermissionStatus>);
+{$ENDIF}
 var
   pProc : TProc<Boolean>;
   bPermissao : Boolean;
